@@ -26,24 +26,39 @@ public class EmployeeService {
         return employeeRepository.findAll();
     }
 
-    public void createEmployee(Employee employee) {
+    public Employee createEmployee(Employee employee) {
         Optional<Employee> emOptional = this.employeeRepository.findEmployeeByEmail(employee.getEmail());
 
         if (emOptional.isPresent()) {
             throw new IllegalStateException("email already taken");
         }
         System.out.println(employee);
-        employeeRepository.save(employee);
+        return employeeRepository.save(employee);
     }
 
-    public void assignProject(Long employeeId, Long projectId) {
+    public String assignProject(Long employeeId, Long projectId) {
         Optional<Employee> emOptional = employeeRepository.findEmployeeById(employeeId);
         Optional<Project> pOptional = projectRepository.findById(projectId);
         try {
             Employee employee = emOptional.get();
             Project project = pOptional.get();
-            employee.addProject(project);
+            String res = employee.assignProject(project);
             employeeRepository.save(employee);
+            return res;
+        } catch (Exception e) {
+            throw new IllegalStateException(e.getMessage());
+        }
+    }
+
+    public String removeProject(Long employeeId, Long projectId) {
+        Optional<Employee> emOptional = employeeRepository.findEmployeeById(employeeId);
+        Optional<Project> pOptional = projectRepository.findById(projectId);
+        try {
+            Employee employee = emOptional.get();
+            Project project = pOptional.get();
+            String res = employee.removeProject(project);
+            employeeRepository.save(employee);
+            return res;
         } catch (Exception e) {
             throw new IllegalStateException(e.getMessage());
         }

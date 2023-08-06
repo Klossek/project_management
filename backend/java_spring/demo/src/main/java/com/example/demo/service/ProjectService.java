@@ -22,6 +22,10 @@ public class ProjectService {
         return projectRepository.findAll();
     }
 
+    public Project createProject(Project project) {
+        return projectRepository.save(project);
+    }
+
     /*
      * public void createSkill(Skill skill) {
      * skillRepository.save(skill);

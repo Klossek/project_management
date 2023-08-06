@@ -36,14 +36,20 @@ public class EmployeeController {
     }
 
     @PostMapping
-    public void createEmployee(@RequestBody Employee employee) {
-        this.employeeService.createEmployee(employee);
+    public Employee createEmployee(@RequestBody Employee employee) {
+        return this.employeeService.createEmployee(employee);
     }
 
+    @CrossOrigin
     @PostMapping(path = "/{id}/assignProject/{projectId}")
-    public void assignProject(@PathVariable("id") Long employeeId, @PathVariable("projectId") Long projectId) {
-        this.employeeService.assignProject(employeeId, projectId);
+    public String assignProject(@PathVariable("id") Long employeeId, @PathVariable("projectId") Long projectId) {
+        return this.employeeService.assignProject(employeeId, projectId);
+    }
 
+    @CrossOrigin
+    @PostMapping(path = "/{id}/removeProject/{projectId}")
+    public String removeProject(@PathVariable("id") Long employeeId, @PathVariable("projectId") Long projectId) {
+        return this.employeeService.removeProject(employeeId, projectId);
     }
 
     @PutMapping

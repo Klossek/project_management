@@ -3,39 +3,85 @@ import { useEffect, useState } from 'react';
 import axios from './api/axios';
 
 
+
 import './App.css';
 import Matrix from './components/Matrix';
 import Error from './components/Error';
 import Loading from './components/Loading';
-
+import ProjectForm from './components/ProjectForm';
+import EmployeeForm from './components/EmployeeForm';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import { EmployeesProvider, useEmployees, useEmployeesDispatch } from './EmployeesContext';
 function App() {
 
-  const [employees, setEmployees] = useState();
+  const employees = useEmployees();
+  const dispatch = useEmployeesDispatch();
   const [projects, setProjects] = useState();
+  const [table, setTable] = useState([]);
   const [error, setError] = useState();
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const loadEmployees = async () => {
       const resEmployees = await axios.get("/employee");
-      setEmployees(resEmployees.data);
+      const employees = resEmployees.data;
+      dispatch({
+        type: 'loaded',
+        employees,
+      });
     };
     const loadProjects = async () => {
       const resProjects = await axios.get("/project");
-      setProjects(resProjects.data);
-
+      const projects = resProjects.data;
+      setProjects(projects);
+      return projects;
     };
     try {
-      const p1 = loadEmployees();
-      const p2 = loadProjects();
-      Promise.all([p1, p2]).then(() => {
-        setLoading(false);
-      });
+      loadEmployees();
+      loadProjects();
     } catch (error) {
       setError(error);
     }
 
   }, []);
+
+  useEffect(() => {
+    if (employees && projects) {
+      const table = calcTable(employees, projects);
+      setTable(table);
+      setLoading(false);
+    }
+  }, [employees, projects]);
+
+  const calcTable = (employees, projects) => {
+    const table = [];
+    let counter = 0;
+    employees.map((employee) => {
+      const row = [];
+      projects.map(project => {
+
+        const entry = {
+          id: counter,
+          employeeId: employee.id,
+          employee,
+          project,
+          projectId: project.id,
+          assigned: !!employee.projects.find((p) => p.id === project.id)
+        };
+        counter++;
+        row.push(entry);
+      });
+      table.push(row);
+    });
+    return table;
+  };
+
+  const createProject = async (project) => {
+    const res = await axios.post("/project", project);
+    const databaseProject = res.data;
+    setProjects([...projects, databaseProject]);
+  };
+
 
 
   if (error) {
@@ -46,12 +92,15 @@ function App() {
     return <Loading />;
   }
 
-  return <>
-    <Matrix projects={projects} employees={employees} />
-  </>;
-
-
-
+  return (<>
+    <Matrix table={table} projects={projects} employees={employees} />
+    <div className='flex'>
+      <ProjectForm onSubmit={createProject} />
+      <EmployeeForm />
+    </div>
+  </>
+  );
 }
+
 
 export default App;

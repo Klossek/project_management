@@ -27,7 +27,7 @@ public class Project {
 
     @ManyToMany(mappedBy = "projects")
     @JsonIgnore
-    Set<Employee> employees = new HashSet<>();
+    private Set<Employee> employees = new HashSet<>();
 
     public Project() {
 
@@ -44,7 +44,12 @@ public class Project {
     public void addEmployee(Employee e) {
         if (!this.employees.contains(e)) {
             this.employees.add(e);
-            e.addProject(this);
+        }
+    }
+
+    public void removeEmployee(Employee e) {
+        if (this.employees.contains(e)) {
+            this.employees.remove(e);
         }
     }
 

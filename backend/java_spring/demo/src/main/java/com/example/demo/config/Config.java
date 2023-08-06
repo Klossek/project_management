@@ -35,8 +35,8 @@ public class Config {
             employeeRepository.saveAll(List.of(jopy, sam));
             projectRepository.save(p2);
             projectRepository.save(p1);
-            sam.addProject(p2);
-            sam.addProject(p1);
+            sam.assignProject(p2);
+            sam.assignProject(p1);
             employeeRepository.save(sam);
             System.out.println(sam.toString());
             System.out.println(p2.toString());

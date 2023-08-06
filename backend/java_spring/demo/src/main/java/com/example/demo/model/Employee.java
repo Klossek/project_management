@@ -75,11 +75,22 @@ public class Employee {
         return this.id;
     }
 
-    public void addProject(Project p) {
+    public String removeProject(Project p) {
+        if (this.projects.contains(p)) {
+            this.projects.remove(p);
+            p.removeEmployee(this);
+            return "removed";
+        }
+        throw new IllegalStateException();
+    }
+
+    public String assignProject(Project p) {
         if (!this.projects.contains(p)) {
             this.projects.add(p);
             p.addEmployee(this);
+            return "added";
         }
+        throw new IllegalStateException();
     }
 
     public void setId(Long id) {

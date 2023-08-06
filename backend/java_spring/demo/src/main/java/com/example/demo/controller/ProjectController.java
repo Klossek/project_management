@@ -35,4 +35,9 @@ public class ProjectController {
         return projectService.getProjects();
     }
 
+    @PostMapping
+    public Project createProject(@RequestBody Project project) {
+        return this.projectService.createProject(project);
+    }
+
 }
