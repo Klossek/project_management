@@ -23,7 +23,7 @@ const Matrix = ({ table, projects, employees }) => {
 
 
 
-        <ul className="flex flex-col justify-start items-start  ">
+        <ul className="flex flex-col justify-start items-start m-2 ">
             {
                 employees.map((employee, index) => {
 
