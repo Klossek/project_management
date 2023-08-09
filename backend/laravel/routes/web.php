@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\EmployeeController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -16,3 +17,14 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+
+
+Route::get('/hallo', function () {
+    return view('laravel');
+});
+
+
+Route::get('/employees', [EmployeeController::class, 'index']);
+
+// Route definition...
+Route::get('/users/{user}', [UserController::class, 'show']);
