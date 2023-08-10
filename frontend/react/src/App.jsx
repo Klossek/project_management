@@ -11,7 +11,7 @@ import Loading from './components/Loading';
 import ProjectForm from './components/ProjectForm';
 import EmployeeForm from './components/EmployeeForm';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { EmployeesProvider, useEmployees, useEmployeesDispatch } from './EmployeesContext';
+import { useEmployees, useEmployeesDispatch } from './EmployeesContext';
 function App() {
 
   const employees = useEmployees();
